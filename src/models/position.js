@@ -3,11 +3,12 @@ const mongoose = require("mongoose");
 const positionSchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     required: true,
   },
   description: {
     type: String,
-    default: "",
+    required: true,
   },
   countofCandidate: {
     type: Number,
@@ -24,6 +25,10 @@ const positionSchema = new mongoose.Schema({
   slotIndex: {
     type: Number,
     required: true,
+  },
+  winner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "candidate",
   },
   candidateRegister: [
     {

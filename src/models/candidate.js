@@ -11,7 +11,7 @@ const candidateSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    default: "",
+    required: true,
   },
   description: {
     type: String,
