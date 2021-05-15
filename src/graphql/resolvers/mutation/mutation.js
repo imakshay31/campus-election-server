@@ -1,8 +1,7 @@
-// Import all Model
+const UserModel = require("../../../models/user");
+const CandidateModel = require("../../../models/candidate");
+const PositionModel = require("../../../models/position");
 
-const mutation = {
-  //1
-  //2
-};
+const mutation = {};
 
 export default mutation;

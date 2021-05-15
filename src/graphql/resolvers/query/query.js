@@ -13,6 +13,7 @@ const query = {
       });
     } catch (err) {
       console.log(err);
+      throw new Error(err);
     }
   },
   getCandidateForPosition: async (args, req) => {
@@ -26,6 +27,7 @@ const query = {
       return candidates;
     } catch (err) {
       console.log(err);
+      throw new Error(err);
     }
   },
   getWinner: async (args, req) => {
@@ -37,6 +39,7 @@ const query = {
       return winnerCandidate;
     } catch (err) {
       console.log(err);
+      throw new Error(err);
     }
   },
 };
