@@ -38,6 +38,6 @@ const positionSchema = new mongoose.Schema({
   ],
 });
 
-const positionModel = new mongoose.Model("position", positionSchema);
+const PositionModel = new mongoose.Model("position", positionSchema);
 
-export default positionModel;
+export default PositionModel;

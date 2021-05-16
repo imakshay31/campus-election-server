@@ -43,6 +43,12 @@ const schema = buildSchema(`
         password : String!
     }
 
+    type PositionInput{
+        name : String!
+        description : String!
+        slotIndex : Int!
+    }
+
     type CandidateInput{
         email : String!
         name : String!
@@ -51,30 +57,17 @@ const schema = buildSchema(`
         positionApplied : ID
     }
 
-    type PositionInput{
-        name : String!
-        description : String!
-        slotIndex : Int!
-    }
-
-    type UpdatePositionInput{
-        candidateId : ID
-        positionId : ID
-    }
-
-    type UpdateUserInput {
-        email : String!
+    type AfterVoteInput {
+        PositionId : ID
+        CandidateId : ID
     }
 
     type : RootMutation {
-        createUser(userInput : UserInput) : User
-        createCandidate(candidateInput : CandidateInput) : Candidate
         createPosition(positionInput : PositionInput) Position
-        updatePosition(updatePositionInput : UpdatePositionInput) Position
-        updateUser(updateUserInput : UpdateUserInput) : User
+        createCandidate(candidateInput : CandidateInput) : Candidate
         afterVoteUpdateUser(PositionId : ID) : User
         afterVoteUpdateCandidate(CandidateId : ID) : Candidate
-        afterVoteUpdatePosition(PositionId : ID) : Position
+        afterVoteUpdatePosition(afterVoteInput : AfterVoteInput) : Position
         generateResult(PositionId : ID) : Position
         
     }

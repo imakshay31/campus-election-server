@@ -31,6 +31,6 @@ const candidateSchema = new mongoose.Schema({
   },
 });
 
-const candidateModel = new mongoose.Model("candidate", candidateSchema);
+const CandidateModel = new mongoose.Model("candidate", candidateSchema);
 
-export default candidateModel;
+export default CandidateModel;
