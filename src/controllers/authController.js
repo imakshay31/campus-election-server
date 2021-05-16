@@ -1,12 +1,13 @@
-const userModel = require("../models/user");
-const bycrpt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import UserModel from "../models/user.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const controlRegister = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const existingUser = await userModel.find({ email });
+    console.log(email);
+    const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({
@@ -14,9 +15,12 @@ export const controlRegister = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bycrpt.hash(password, process.env.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(
+      password,
+      parseInt(process.env.SALT_ROUNDS)
+    );
 
-    const user = await new userModel({
+    const user = await new UserModel({
       email: email,
       password: hashedPassword,
     });
@@ -29,7 +33,6 @@ export const controlRegister = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    throw new Error(err);
   }
 };
 
@@ -37,13 +40,13 @@ export const controlLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await userModel.find({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       return res.status(400).json({ error: "User Not Found " });
     }
 
-    const isEqual = await bycrpt.compare(password, user.password);
+    const isEqual = await bcrypt.compare(password, user.password);
 
     if (!isEqual) {
       return res.status(400).json({ error: "Password Not Matched" });
@@ -68,6 +71,5 @@ export const controlLogin = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    throw new Error(err);
   }
 };
