@@ -1,6 +1,6 @@
-const { buildSchema } = require("graphql");
+import graphql from "graphql";
 
-const schema = buildSchema(`
+const schema = graphql.buildSchema(`
     type User {
         _id : ID!
         email : String!
@@ -38,18 +38,13 @@ const schema = buildSchema(`
         getWinner(PositionId : ID) : Candidate
     }
 
-    type UserInput {
-        email : String!
-        password : String!
-    }
-
-    type PositionInput{
+    input positionInput{
         name : String!
         description : String!
         slotIndex : Int!
     }
 
-    type CandidateInput{
+    input candidateInput{
         email : String!
         name : String!
         phone : String!
@@ -57,17 +52,17 @@ const schema = buildSchema(`
         positionApplied : ID
     }
 
-    type AfterVoteInput {
+    input afterVoteInput {
         PositionId : ID
         CandidateId : ID
     }
 
-    type : RootMutation {
-        createPosition(positionInput : PositionInput) Position
-        createCandidate(candidateInput : CandidateInput) : Candidate
+    type  RootMutation {
+        createPosition(positionInput : positionInput) : Position
+        createCandidate(candidateInput : candidateInput) : Candidate
         afterVoteUpdateUser(PositionId : ID) : User
         afterVoteUpdateCandidate(CandidateId : ID) : Candidate
-        afterVoteUpdatePosition(afterVoteInput : AfterVoteInput) : Position
+        afterVoteUpdatePosition(afterVoteInput : afterVoteInput) : Position
         generateResult(PositionId : ID) : Position
         
     }
