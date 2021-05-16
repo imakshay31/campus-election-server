@@ -1,29 +1,21 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const { graphqlHTTP } = require("express-graphql");
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import { graphqlHTTP } from "express-graphql";
 import cookieParser from "cookie-parser";
-const isAuth = require("./middleware/is-auth");
-import authRouter from "./auth/authRoutes";
-const graphqlSchema = require("./graphql/schema/index");
-const graphqlResolvers = require("./graphql/resolvers/index");
+import isAuth from "./middleware/is-auth.js";
+import authRouter from "./auth/authRoutes.js";
+import graphqlSchema from "./graphql/schema/index.js";
+import graphqlResolvers from "./graphql/resolvers/index.js";
 
 dotenv.config();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(isAuth);
-
-app.get(
-  "/playground",
-  expressPlayground({
-    endpoint: "/graphql",
-    subscriptionEndpoint: "/graphql",
-  })
-);
 
 app.use("/api", authRouter);
 
