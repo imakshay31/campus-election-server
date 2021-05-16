@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const candidateSchema = new mongoose.Schema({
   email: {
     type: String,
+    unique: true,
     required: true,
   },
   name: {
@@ -31,6 +32,6 @@ const candidateSchema = new mongoose.Schema({
   },
 });
 
-const CandidateModel = new mongoose.Model("candidate", candidateSchema);
+const CandidateModel = new mongoose.model("candidate", candidateSchema);
 
 export default CandidateModel;

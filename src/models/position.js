@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const positionSchema = new mongoose.Schema({
   name: {
@@ -25,6 +25,7 @@ const positionSchema = new mongoose.Schema({
   slotIndex: {
     type: Number,
     required: true,
+    unique: true,
   },
   winner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +39,6 @@ const positionSchema = new mongoose.Schema({
   ],
 });
 
-const PositionModel = new mongoose.Model("position", positionSchema);
+const PositionModel = new mongoose.model("position", positionSchema);
 
 export default PositionModel;
