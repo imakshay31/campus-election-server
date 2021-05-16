@@ -1,6 +1,6 @@
-const UserModel = require("../../../models/user");
-const CandidateModel = require("../../../models/candidate");
-const PositionModel = require("../../../models/position");
+import UserModel from "../../../models/user.js";
+import CandidateModel from "../../../models/candidate.js";
+import PositionModel from "../../../models/position.js";
 
 const query = {
   getAllPosition: async (args, req) => {
@@ -13,7 +13,6 @@ const query = {
       });
     } catch (err) {
       console.log(err);
-      throw new Error(err);
     }
   },
   getCandidateForPosition: async (args, req) => {
@@ -27,7 +26,6 @@ const query = {
       return candidates;
     } catch (err) {
       console.log(err);
-      throw new Error(err);
     }
   },
   getWinner: async (args, req) => {
@@ -39,7 +37,6 @@ const query = {
       return winnerCandidate;
     } catch (err) {
       console.log(err);
-      throw new Error(err);
     }
   },
 };

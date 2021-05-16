@@ -1,5 +1,5 @@
-const mutations = require("./mutation/mutation");
-const queries = require("./query/query");
+import mutations from "./mutation/mutation.js";
+import queries from "./query/query.js";
 
 const resolver = {
   ...mutations,

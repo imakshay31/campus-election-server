@@ -1,6 +1,7 @@
-const UserModel = require("../../../models/user");
-const CandidateModel = require("../../../models/candidate");
-const PositionModel = require("../../../models/position");
+import UserModel from "../../../models/user.js";
+import CandidateModel from "../../../models/candidate.js";
+import PositionModel from "../../../models/position.js";
+import mongoose from "mongoose";
 
 const mutation = {
   createPosition: async (args, req) => {
@@ -40,7 +41,11 @@ const mutation = {
 
       const registeredCandidate = await Candidate.save();
 
-      const Position = await PositionModel.findbyId(positionApplied);
+      const Position = await PositionModel.findOne({
+        _id: mongoose.Types.ObjectId(positionApplied),
+      });
+
+      console.log(Position);
 
       await Position.candidateRegister.push(registeredCandidate);
 
@@ -52,8 +57,9 @@ const mutation = {
 
       await Position.save();
 
-      // const user = await UserModel.find({ email });
-      const user = await UserModel.findbyId(req.userId);
+      const user = await UserModel.findOne({ email });
+      //console.log(req.userId);
+      //const user = await UserModel.findbyId(req.userId);
 
       await user.updateOne({
         isCandidate: true,
