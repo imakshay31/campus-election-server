@@ -73,3 +73,14 @@ export const controlLogin = async (req, res) => {
     console.log(err);
   }
 };
+
+export const controlLogout = async (req, res) => {
+  res
+    .cookie("token", "", {
+      //httpOnly: true,
+      expires: new Date(0),
+      // sameSite: "None",
+      // secure: true,
+    })
+    .send("Logged Out");
+};
