@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { graphqlHTTP } from "express-graphql";
 import cookieParser from "cookie-parser";
-import isAuth from "./middleware/is-auth.js";
 import authRouter from "./auth/authRoutes.js";
 import graphqlSchema from "./graphql/schema/index.js";
 import graphqlResolvers from "./graphql/resolvers/index.js";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -15,18 +15,25 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(isAuth);
 
 app.use("/api", authRouter);
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
+app.use("/graphql", async (req, res) => {
+  const token = await req.cookies.token;
+
+  if (token) {
+    const user = await jwt.verify(token, process.env.JWT_WEB_TOKEN_SECRET);
+    req.userId = user._id;
+  }
+  console.log("ok now");
+  console.log(req.userId);
+
+  return graphqlHTTP({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
     graphiql: true,
-  })
-);
+  })(req, res);
+});
 
 mongoose
   .connect(process.env.DB_URL, {
