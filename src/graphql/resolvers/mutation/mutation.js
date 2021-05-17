@@ -57,9 +57,14 @@ const mutation = {
 
       await Position.save();
 
-      const user = await UserModel.findOne({ email });
-      //console.log(req.userId);
-      //const user = await UserModel.findbyId(req.userId);
+      //const user = await UserModel.findOne({ email });
+      console.log(req.userId);
+
+      const user = await UserModel.findOne({
+        _id: mongoose.Types.ObjectId(req.userId),
+      });
+
+      console.log(user);
 
       await user.updateOne({
         isCandidate: true,
@@ -79,7 +84,9 @@ const mutation = {
     try {
       const { PositionId } = args;
 
-      const user = await UserModel.findbyId(req.userId);
+      const user = await UserModel.findOne({
+        _id: mongoose.Types.ObjectId(req.userId),
+      });
 
       const isAlreadyVoted = user.positionVoted.find(
         ({ _id }) => _id === PositionId
@@ -89,7 +96,9 @@ const mutation = {
         return new Error(" You have Voted For This Position Already !!");
       }
 
-      const position = await PositionModel.findbyId(PositionId);
+      const position = await PositionModel.findOne({
+        _id: mongoose.Types.ObjectId(PositionId),
+      });
 
       await user.positionVoted.push(position);
 
@@ -112,7 +121,9 @@ const mutation = {
   afterVoteUpdateCandidate: async (args, req) => {
     try {
       const { CandidateId } = args;
-      const candidate = await CandidateModel.findbyId(CandidateId);
+      const candidate = await CandidateModel.findOne({
+        _id: mongoose.Types.ObjectId(CandidateId),
+      });
 
       await candidate.updateOne({
         voteEarned: candidate.voteEarned + 1,
@@ -133,8 +144,12 @@ const mutation = {
       const { afterVoteInput } = args;
       const { PositionId, CandidateId } = afterVoteInput;
 
-      const Position = await PositionModel.findbyId(PositionId);
-      const Candidate = await CandidateModel.findbyId(CandidateId);
+      const Position = await PositionModel.findOne({
+        _id: mongoose.Types.ObjectId(PositionId),
+      });
+      const Candidate = await CandidateModel.findOne({
+        _id: mongoose.Types.ObjectId(CandidateId),
+      });
 
       await Position.updateOne({
         totalVotes: Position.totalVotes + 1,

@@ -58,13 +58,14 @@ export const controlLogin = async (req, res) => {
       },
       process.env.JWT_WEB_TOKEN_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: "1d",
       }
     );
 
     res.cookie("token", token, {});
 
     res.status(200).json({
+      isLoggedIn: true,
       token,
       id: user._id,
       email: user.email,
@@ -77,10 +78,26 @@ export const controlLogin = async (req, res) => {
 export const controlLogout = async (req, res) => {
   res
     .cookie("token", "", {
-      //httpOnly: true,
       expires: new Date(0),
-      // sameSite: "None",
-      // secure: true,
     })
     .send("Logged Out");
+};
+
+export const checkLoginStatus = async (req, res) => {
+  try {
+    const token = await req.cookies.token;
+    if (!token)
+      return res.status(201).json({
+        isLoggedIn: false,
+      });
+
+    const verify = await jwt.verify(token, process.env.JWT_WEB_TOKEN_SECRET);
+    res.status(201).json({
+      isLoggedIn: true,
+      id: verify._id,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ isLoggedIn: false });
+  }
 };
