@@ -89,7 +89,7 @@ const mutation = {
       });
 
       const isAlreadyVoted = user.positionVoted.find(
-        ({ _id }) => _id === PositionId
+        (position) => position._id === PositionId
       );
 
       if (isAlreadyVoted) {
@@ -157,13 +157,50 @@ const mutation = {
 
       await Position.save();
 
-      const maxVoteTillNow = max(Position.maxVotes, Candidate.voteEarned);
+      const maxVoteTillNow = Math.max(Position.maxVotes, Candidate.voteEarned);
 
       await Position.updateOne({
         maxVotes: maxVoteTillNow,
       });
 
       await Position.save();
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  generateResult: async (args, req) => {
+    try {
+      const { PositionId } = args;
+
+      const Position = await PositionModel.findOne({
+        _id: mongoose.Types.ObjectId(PositionId),
+      });
+
+      const maxVote = Position.maxVotes;
+
+      const CandidatesId = Position.candidateRegister;
+
+      const registeredCandidate = await CandidateModel.find({
+        _id: { $in: CandidatesId },
+      });
+
+      const winnerCandidates = registeredCandidate.map((candidate) => {
+        return candidate.voteEarned === maxVote;
+      });
+
+      const size = winnerCandidates.length;
+      const randomNumber = Math.floor(Math.random() * size);
+
+      const winnerCandidate = winnerCandidates[randomNumber];
+
+      await Position.updateOne({
+        winner: winnerCandidate._id,
+      });
+
+      await Position.save();
+
+      return winnerCandidate;
     } catch (err) {
       console.log(err);
     }

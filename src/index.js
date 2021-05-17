@@ -25,8 +25,6 @@ app.use("/graphql", async (req, res) => {
     const user = await jwt.verify(token, process.env.JWT_WEB_TOKEN_SECRET);
     req.userId = user._id;
   }
-  console.log("ok now");
-  console.log(req.userId);
 
   return graphqlHTTP({
     schema: graphqlSchema,

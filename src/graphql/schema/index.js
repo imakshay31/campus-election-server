@@ -63,7 +63,7 @@ const schema = graphql.buildSchema(`
         afterVoteUpdateUser(PositionId : ID) : User
         afterVoteUpdateCandidate(CandidateId : ID) : Candidate
         afterVoteUpdatePosition(afterVoteInput : afterVoteInput) : Position
-        generateResult(PositionId : ID) : Position
+        generateResult(PositionId : ID) : Candidate
         
     }
     schema{
